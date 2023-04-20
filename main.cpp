@@ -1,8 +1,122 @@
 #include <iostream>
-#include "fila.h"
-#include "pilha.h"
-
 using namespace std;
+
+class No {
+    friend class Lista;
+    private:
+        int valor;
+        No* proximo;
+    public:
+        No(int valor) {
+            this->valor = valor;
+            this->proximo = NULL;
+        }
+};
+
+class Lista {
+    private:
+        No* inicio;
+        No* fim;
+        int tamanho;
+    public:
+        Lista() {
+            this->inicio = NULL;
+            this->fim = NULL;
+            this->tamanho = 0;
+        }
+
+        void adicionarInicio(int valor) {
+            No* novo = new No(valor);
+            if (this->inicio == NULL) {
+                this->inicio = novo;
+                this->fim = novo;
+            } else {
+                novo->proximo = this->inicio;
+                this->inicio = novo;
+            }
+            this->tamanho++;
+        }
+
+        void adicionarFim(int valor) {
+            No* novo = new No(valor);
+            if (this->fim == NULL) {
+                this->inicio = novo;
+                this->fim = novo;
+            } else {
+                this->fim->proximo = novo;
+                this->fim = novo;
+            }
+            this->tamanho++;
+        }
+
+        void removerInicio() {
+            if (this->inicio != NULL) {
+                No* aux = this->inicio;
+                this->inicio = this->inicio->proximo;
+                delete aux;
+                this->tamanho--;
+            }
+        }
+
+        void imprimir() {
+            No* atual = this->inicio;
+            cout << "[";
+            while (atual != NULL) {
+                cout << atual->valor;
+                atual = atual->proximo;
+                if (atual != NULL) {
+                    cout << ", ";
+                }
+            }
+            cout << "]" << endl;
+        }
+
+        int getTamanho() {
+            return this->tamanho;
+        }
+};
+
+
+class Pilha {
+private:
+    Lista lista;
+public:
+    Pilha() {}
+    void empilhar(int valor) {
+        lista.adicionarInicio(valor);
+    }
+    void desempilhar() {
+        lista.removerInicio();
+    }
+    void imprimir() {
+        lista.imprimir();
+    }
+};
+
+
+class Fila {
+private:
+    Lista* lista;
+
+public:
+    Fila() {
+        this->lista = new Lista();
+    }
+
+    void enfileirar(int valor) {
+        this->lista->adicionarFim(valor);
+    }
+
+    void desenfileirar() {
+        this->lista->removerInicio();
+    }
+
+    void imprimir() {
+        this->lista->imprimir();
+    }
+};
+
+
 
 int main() {
     Fila fila;
